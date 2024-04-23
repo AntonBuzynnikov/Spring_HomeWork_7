@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.buzynnikov.notemanager.dto.NoteDTO;
 import ru.buzynnikov.notemanager.exceptions.NotFoundNoteException;
 import ru.buzynnikov.notemanager.models.Note;
+import ru.buzynnikov.notemanager.security.repositories.UserRepository;
 import ru.buzynnikov.notemanager.services.NoteService;
 
 import java.util.List;
@@ -17,11 +18,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NoteController {
     private final NoteService noteService;
+    private final UserRepository userRepository;
     /*
         Возвращаем в формате json список всех заметок
      */
     @GetMapping
     public ResponseEntity<List<Note>> getAllNotes(){
+        noteService.saveNote(new NoteDTO("Первая заметка","Это первая заметка"));
+        noteService.saveNote(new NoteDTO("Вторая заметка","Это вторая заметка"));
+        System.out.println(userRepository.findAll());
         return new ResponseEntity<>(noteService.getAllNotes(), HttpStatus.OK);
     }
     /*
